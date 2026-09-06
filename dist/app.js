@@ -3,7 +3,7 @@
 
   const palette = ["#CAD2C5", "#84A98C", "#52796F", "#354F52", "#2F3E46"];
   const nullColor = "#dfe5eb";
-  const baseStroke = "#526a81";
+  const baseStroke = "#000000";
   const selectedStroke = "#10243a";
   const absoluteValueGroups = new Set(["Tab2_1", "Tab2_3", "Tab8_1", "Tab8_2", "Tab8_3"]);
   const ptInteger = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
