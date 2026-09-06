@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mapa interativo das Áreas de Ponderação do Censo Demográfico 2022 no estado de São Paulo."
+    />
+    <title>Áreas de Ponderação — São Paulo</title>
+    <link rel="stylesheet" href="./vendor/leaflet/leaflet.css?v=1.9.4" />
+    <link rel="stylesheet" href="./styles.css?v=3" />
+    <script src="./vendor/leaflet/leaflet.js?v=1.9.4" defer></script>
+    <script src="./app.js?v=4" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" role="img">
+              <path d="M5 6.5 14 4l4 4 9-2v19l-9 2-4-4-9 2Z" />
+              <path d="m14 4v19m4-15v19" />
+            </svg>
+          </div>
+          <div>
+            <h1>Áreas de Ponderação</h1>
+            <p>São Paulo · Censo Demográfico 2022</p>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <div class="dataset-counter" aria-label="Dimensão da base">
+            <strong id="areaCount">2.535</strong> áreas
+            <span aria-hidden="true">·</span>
+            <strong id="variableCount">305</strong> variáveis
+          </div>
+          <button class="button button-quiet mobile-only" id="filtersToggle" type="button">
+            Filtros
+          </button>
+          <button class="icon-button" id="aboutButton" type="button" aria-label="Sobre os dados" title="Sobre os dados">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 10v6m0-9h.01" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="control-panel" id="controlPanel" aria-label="Busca e variáveis">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">Consulta territorial</span>
+              <h2>Encontre uma área</h2>
+            </div>
+            <button class="icon-button mobile-only" id="filtersClose" type="button" aria-label="Fechar filtros">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+            </button>
+          </div>
+
+          <div class="field-group search-group">
+            <label for="areaSearch">Nome, município ou código</label>
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m16 16 4 4" /></svg>
+              <input id="areaSearch" type="search" placeholder="Ex.: Campinas ou 3509502…" autocomplete="off" />
+              <button class="clear-input" id="clearAreaSearch" type="button" aria-label="Limpar busca" hidden>×</button>
+            </div>
+            <div class="search-results" id="areaResults" role="listbox" aria-label="Resultados da busca"></div>
+          </div>
+
+          <div class="section-rule"></div>
+
+          <div class="panel-heading compact">
+            <div>
+              <span class="eyebrow">Mapa temático</span>
+              <h2>Escolha uma variável</h2>
+            </div>
+          </div>
+
+          <div class="field-group variable-search-group">
+            <label for="variableSearch">Pesquisar entre as variáveis</label>
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m16 16 4 4" /></svg>
+              <input id="variableSearch" type="search" placeholder="Ex.: internet, renda, autismo…" autocomplete="off" />
+              <button class="clear-input" id="clearVariableSearch" type="button" aria-label="Limpar busca" hidden>×</button>
+            </div>
+            <div class="search-results variable-results" id="variableResults" role="listbox" aria-label="Resultados de variáveis"></div>
+          </div>
+
+          <div class="field-group">
+            <label for="groupSelect">Tabela</label>
+            <select id="groupSelect"></select>
+          </div>
+
+          <div class="field-group">
+            <label for="metricSelect">Variável exibida</label>
+            <select id="metricSelect"></select>
+          </div>
+
+          <div class="metric-summary" id="metricSummary" aria-live="polite">
+            <span class="loading-line"></span>
+            <span class="loading-line short"></span>
+          </div>
+
+          <div class="legend-card" id="legendCard" aria-label="Legenda do mapa">
+            <div class="legend-title">
+              <span>Legenda</span>
+              <span id="validCount"></span>
+            </div>
+            <div id="legendItems"></div>
+            <div class="legend-null"><span></span> Sem dado</div>
+          </div>
+
+          <p class="source-note">Fonte: IBGE, Censo Demográfico 2022 — Resultados Gerais da Amostra. Nas tabelas 8.1, 8.2 e 8.3, todos os valores são absolutos. Nas demais, o Total é absoluto e as outras variáveis são percentuais do Total.</p>
+        </aside>
+
+        <section class="map-stage" aria-label="Mapa das Áreas de Ponderação de São Paulo">
+          <div class="loading-state" id="loadingState" role="status">
+            <div class="loading-orbit" aria-hidden="true"></div>
+            <strong>Preparando o mapa</strong>
+            <span>Carregando a base vetorial otimizada e os indicadores…</span>
+          </div>
+          <div id="map"></div>
+          <div class="map-base-note">Base vetorial local · sem mosaicos externos</div>
+          <div class="map-badge" id="mapBadge" hidden>
+            <span class="map-badge-swatch"></span>
+            <span id="mapBadgeText"></span>
+          </div>
+          <button class="map-action" id="resetView" type="button" title="Ver todo o estado">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg>
+            <span>Ver estado</span>
+          </button>
+        </section>
+
+        <aside class="details-panel" id="detailsPanel" aria-label="Detalhes da Área de Ponderação">
+          <div class="empty-details" id="emptyDetails">
+            <div class="empty-map-icon" aria-hidden="true">
+              <svg viewBox="0 0 40 40"><path d="m6 9 10-3 8 4 10-3v24l-10 3-8-4-10 3Z" /><path d="M16 6v24m8-20v24" /><circle cx="24" cy="18" r="3" /></svg>
+            </div>
+            <h2>Selecione uma área</h2>
+            <p>Clique no mapa ou use a busca para consultar seus indicadores.</p>
+          </div>
+
+          <div class="details-content" id="detailsContent" hidden>
+            <div class="details-topline">
+              <span class="eyebrow">Área selecionada</span>
+              <button class="icon-button" id="detailsClose" type="button" aria-label="Fechar detalhes">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+              </button>
+            </div>
+            <h2 id="detailName"></h2>
+            <p class="detail-municipality" id="detailMunicipality"></p>
+            <div class="detail-tags">
+              <span id="detailCode"></span>
+              <span id="detailArea"></span>
+              <span id="detailSectors"></span>
+            </div>
+
+            <div class="selected-metric-card">
+              <span id="selectedMetricLabel">Variável no mapa</span>
+              <strong id="selectedMetricValue"></strong>
+              <small id="selectedMetricTable"></small>
+            </div>
+
+            <div class="detail-filter">
+              <label for="detailSearch">Filtrar indicadores desta área</label>
+              <div class="search-input-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m16 16 4 4" /></svg>
+                <input id="detailSearch" type="search" placeholder="Digite parte do indicador…" />
+              </div>
+            </div>
+
+            <div class="indicator-groups" id="indicatorGroups"></div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <dialog class="about-dialog" id="aboutDialog">
+      <form method="dialog">
+        <div class="dialog-heading">
+          <div>
+            <span class="eyebrow">Sobre a base</span>
+            <h2>Áreas de Ponderação · SP</h2>
+          </div>
+          <button class="icon-button" value="cancel" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+          </button>
+        </div>
+        <p>O mapa reúne 31 tabelas dos Resultados Gerais da Amostra do Censo Demográfico 2022, associadas às geometrias pela chave <code>cd_apond</code>.</p>
+        <p>Nas tabelas 8.1, 8.2 e 8.3, todas as variáveis são apresentadas em valor absoluto. Nas demais tabelas, o Total permanece absoluto e as outras variáveis são calculadas como <code>(variável ÷ Total) × 100</code>.</p>
+        <dl>
+          <div><dt>Unidades espaciais</dt><dd>2.535</dd></div>
+          <div><dt>Com dados censitários</dt><dd>2.520</dd></div>
+          <div><dt>Variáveis</dt><dd>305</dd></div>
+          <div><dt>Referência espacial</dt><dd>SIRGAS 2000</dd></div>
+        </dl>
+        <p class="dialog-note">A biblioteca do mapa e a base cartográfica são carregadas pelo próprio site, sem depender de CDN ou mosaicos externos. Quinze feições — principalmente represas, parques, áreas portuárias, estuarinas e de praia — não têm linha correspondente nas tabelas e são indicadas como “Sem dado”.</p>
+        <div class="dialog-actions">
+          <button class="button button-secondary" id="downloadGeoJson" type="button">Baixar GeoJSON</button>
+          <button class="button button-primary" value="cancel">Voltar ao mapa</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

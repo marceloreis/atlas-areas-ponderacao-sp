@@ -1,0 +1,12 @@
+{
+  "features": 2535,
+  "fields": 305,
+  "groups": 31,
+  "null_only_rows": 15,
+  "points_before": 2107255,
+  "points_after": 217459,
+  "reduction_percent": 89.68,
+  "tolerance_degrees": 0.00075,
+  "geojson_bytes": 5492918,
+  "variables_bytes": 4074496
+}

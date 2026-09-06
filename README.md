@@ -21,12 +21,12 @@ Mapa interativo das 2.535 Áreas de Ponderação do estado de São Paulo, com 31
 ## Estrutura do projeto
 
 - `dist/`: site pronto para publicação;
-- `dist/data/aponds-sp.geojson`: geometrias simplificadas das Áreas de Ponderação;
-- `dist/data/censo-variables.json`: indicadores censitários e metadados;
+- `dist/data/*.manifest.json`: manifestos dos conjuntos de dados;
+- `dist/data/*.part-*`: partes das geometrias e dos indicadores censitários;
 - `scripts/build_data.py`: rotina de preparação e otimização dos dados;
 - `.github/workflows/pages.yml`: publicação automática no GitHub Pages.
 
-O site usa HTML, CSS, JavaScript e Leaflet 1.9.4. As dependências necessárias à execução estão incluídas em `dist`, portanto o navegador não depende de CDN, serviço de mapas-base ou API externa. A cartografia vetorial foi simplificada para reduzir o tempo de carregamento.
+O site usa HTML, CSS, JavaScript e Leaflet 1.9.4. As dependências necessárias à execução estão incluídas em `dist`, portanto o navegador não depende de CDN, serviço de mapas-base ou API externa. A cartografia vetorial foi simplificada e os conjuntos de dados foram divididos em partes menores para tornar o carregamento mais resiliente. O botão **Baixar GeoJSON** remonta e entrega o arquivo completo no navegador.
 
 ## Executar localmente
 
