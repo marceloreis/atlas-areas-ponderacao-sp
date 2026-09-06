@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const palette = ["#ffffb2", "#fecc5c", "#fd8d3c", "#f03b20", "#bd0026"];
+  const palette = ["#E8985E", "#A9714B", "#54442B", "#262A10", "#141204"];
   const nullColor = "#dfe5eb";
   const baseStroke = "#526a81";
   const selectedStroke = "#10243a";
