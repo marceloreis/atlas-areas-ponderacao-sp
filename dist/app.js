@@ -196,9 +196,9 @@
     return {
       color: selected ? selectedStroke : baseStroke,
       weight: selected ? 2.5 : 0.65,
-      opacity: selected ? 1 : 0.78,
+      opacity: selected ? 1 : 0.86,
       fillColor: colorForValue(valueForFeature(feature)),
-      fillOpacity: selected ? 0.9 : 0.74,
+      fillOpacity: selected ? 0.9 : 0.84,
     };
   }
 
