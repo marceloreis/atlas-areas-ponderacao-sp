@@ -634,17 +634,12 @@
     for (let longitude = -54; longitude <= -44; longitude += 2) {
       L.polyline([[-27.2, longitude], [-17, longitude]], gridStyle).addTo(state.map);
     }
-
-    state.tonerLayer = L.tileLayer(
-      "https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png",
+	
+    state.tonerLayer = L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
       {
-        maxZoom: 20,
-        crossOrigin: true,
-        updateWhenIdle: true,
-        keepBuffer: 2,
-        errorTileUrl: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
-        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://stamen.com/">Stamen Design</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      },
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
+      }
     );
     state.tonerLayer.on("tileload", (event) => {
       if (event.tile?.src?.startsWith("data:")) return;
