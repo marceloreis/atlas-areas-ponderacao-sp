@@ -653,6 +653,12 @@ select:focus {
   font-weight: 650;
 }
 
+.map-base-note.fallback {
+  color: #7b3511;
+  border-color: rgba(189, 77, 18, 0.32);
+  background: rgba(255, 248, 235, 0.96);
+}
+
 .empty-details {
   display: flex;
   height: 100%;

@@ -19,7 +19,9 @@ Mapa interativo das 2.535 Áreas de Ponderação do estado de São Paulo, com 31
 - `scripts/build_data.py`: rotina de preparação e otimização dos dados;
 - `.github/workflows/pages.yml`: publicação automática no GitHub Pages.
 
-O site usa HTML, CSS, JavaScript e Leaflet 1.9.4. As dependências necessárias à execução estão incluídas em `dist`, portanto o navegador não depende de CDN, serviço de mapas-base ou API externa. A cartografia vetorial foi simplificada e os conjuntos de dados foram divididos em partes menores para tornar o carregamento mais resiliente. O botão **Baixar GeoJSON** remonta e entrega o arquivo completo no navegador.
+O site usa HTML, CSS, JavaScript e Leaflet 1.9.4. A biblioteca do mapa está incluída em `dist`; o mapa-base Stamen Toner Lite é solicitado à Stadia Maps e tem a base vetorial local como contingência automática. A cartografia vetorial foi simplificada e os conjuntos de dados foram divididos em partes menores para tornar o carregamento mais resiliente. O botão **Baixar GeoJSON** remonta e entrega o arquivo completo no navegador.
+
+Em produção, a Stadia Maps exige autenticação por domínio. Para o GitHub Pages, registre `marceloreis.github.io` na propriedade correspondente do painel da Stadia; nenhuma chave precisa ser exposta no código.
 
 ## Executar localmente
 
@@ -40,6 +42,7 @@ Todo envio para a branch `main` aciona o workflow de publicação da pasta `dist
 - Dados: IBGE, Censo Demográfico 2022 — Resultados Gerais da Amostra.
 - Geometrias: IBGE, Áreas de Ponderação 2022 do estado de São Paulo.
 - Sistema de referência na fonte: SIRGAS 2000; distribuição web em GeoJSON (CRS84).
+- Mapa-base: Stadia Maps, Stamen Design, OpenMapTiles e colaboradores do OpenStreetMap.
 - Leaflet é distribuído sob licença BSD-2-Clause; o texto está em `dist/vendor/leaflet/LICENSE`.
 
 Há 15 feições territoriais sem linha correspondente nas tabelas censitárias fornecidas; elas permanecem visíveis no mapa e são sinalizadas como sem dados.

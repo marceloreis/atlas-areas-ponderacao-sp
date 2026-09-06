@@ -28,6 +28,7 @@
     legendItems: document.querySelector("#legendItems"),
     mapBadge: document.querySelector("#mapBadge"),
     mapBadgeText: document.querySelector("#mapBadgeText"),
+    mapBaseNote: document.querySelector("#mapBaseNote"),
     resetView: document.querySelector("#resetView"),
     detailsPanel: document.querySelector("#detailsPanel"),
     emptyDetails: document.querySelector("#emptyDetails"),
@@ -65,6 +66,9 @@
     currentFieldIndex: 0,
     thresholds: [],
     numericValues: [],
+    tonerLayer: null,
+    tonerTilesLoaded: false,
+    tonerTileErrors: 0,
     toastTimer: null,
   };
 
@@ -611,7 +615,7 @@
     L.control.zoom({ position: "bottomright" }).addTo(state.map);
     L.control.scale({ position: "bottomleft", imperial: false, maxWidth: 120 }).addTo(state.map);
     state.map.attributionControl.setPrefix("Leaflet 1.9.4");
-    state.map.attributionControl.addAttribution("Geometrias e dados: IBGE · base vetorial local");
+    state.map.attributionControl.addAttribution("Geometrias e dados: IBGE");
 
     state.map.createPane("localBase");
     state.map.getPane("localBase").style.zIndex = 180;
@@ -630,6 +634,34 @@
     for (let longitude = -54; longitude <= -44; longitude += 2) {
       L.polyline([[-27.2, longitude], [-17, longitude]], gridStyle).addTo(state.map);
     }
+
+    state.tonerLayer = L.tileLayer(
+      "https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png",
+      {
+        maxZoom: 20,
+        crossOrigin: true,
+        updateWhenIdle: true,
+        keepBuffer: 2,
+        errorTileUrl: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
+        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://stamen.com/">Stamen Design</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      },
+    );
+    state.tonerLayer.on("tileload", (event) => {
+      if (event.tile?.src?.startsWith("data:")) return;
+      if (state.tonerTilesLoaded) return;
+      state.tonerTilesLoaded = true;
+      elements.mapBaseNote.textContent = "Stamen Toner Lite · Stadia Maps";
+      elements.mapBaseNote.classList.remove("fallback");
+    });
+    state.tonerLayer.on("tileerror", () => {
+      state.tonerTileErrors += 1;
+      if (state.tonerTilesLoaded || state.tonerTileErrors < 3 || !state.map.hasLayer(state.tonerLayer)) return;
+      state.map.removeLayer(state.tonerLayer);
+      elements.mapBaseNote.textContent = "Base vetorial local · Toner Lite indisponível";
+      elements.mapBaseNote.classList.add("fallback");
+      showToast("O mapa-base externo está indisponível; a base vetorial local foi mantida.");
+    });
+    state.tonerLayer.addTo(state.map);
   }
 
   function addGeoJson() {
