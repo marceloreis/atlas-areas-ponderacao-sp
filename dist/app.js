@@ -1,11 +1,11 @@
 (() => {
   "use strict";
 
-  const palette = ["#e1f2ef", "#a9ddd5", "#62c4b9", "#168f87", "#005f5b"];
+  const palette = ["#ffffb2", "#fecc5c", "#fd8d3c", "#f03b20", "#bd0026"];
   const nullColor = "#dfe5eb";
   const baseStroke = "#526a81";
-  const selectedStroke = "#f4b942";
-  const absoluteValueGroups = new Set(["Tab8_1", "Tab8_2", "Tab8_3"]);
+  const selectedStroke = "#10243a";
+  const absoluteValueGroups = new Set(["Tab2_1", "Tab2_3", "Tab8_1", "Tab8_2", "Tab8_3"]);
   const ptInteger = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
   const ptDecimal = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 });
   const ptPercent = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -529,7 +529,7 @@
   }
 
   async function loadChunkedJson(assetName) {
-    const manifestResponse = await fetch(`./data/${assetName}.manifest.json?v=4`);
+    const manifestResponse = await fetch(`./data/${assetName}.manifest.json?v=5`);
     if (!manifestResponse.ok) throw new Error(`Falha ao carregar o manifesto de ${assetName}.`);
     const manifest = await manifestResponse.json();
     if (manifest.format !== "utf8-json-parts-v1" || !Array.isArray(manifest.parts) || !manifest.parts.length) {
@@ -537,7 +537,7 @@
     }
 
     const responses = await Promise.all(
-      manifest.parts.map((part) => fetch(`./data/${part}?v=4`)),
+      manifest.parts.map((part) => fetch(`./data/${part}?v=5`)),
     );
     if (responses.some((response) => !response.ok)) {
       throw new Error(`Falha ao carregar uma parte de ${assetName}.`);

@@ -11,13 +11,6 @@ Mapa interativo das 2.535 Áreas de Ponderação do estado de São Paulo, com 31
 - legenda, escala de cores e informação sobre dados ausentes;
 - interface responsiva para computador e dispositivos móveis.
 
-## Como os valores são exibidos
-
-- Nas tabelas 8.1, 8.2 e 8.3, todas as variáveis são valores absolutos.
-- Nas demais tabelas, a coluna `Total` permanece em valor absoluto.
-- As outras variáveis dessas tabelas são apresentadas como percentual do respectivo total: `(variável / Total) × 100`.
-- Valores sem observação censitária são identificados como `Sem dado`.
-
 ## Estrutura do projeto
 
 - `dist/`: site pronto para publicação;

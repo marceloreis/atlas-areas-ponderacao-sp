@@ -697,6 +697,10 @@ select:focus {
   padding: 22px 20px 28px;
 }
 
+.details-panel > [hidden] {
+  display: none !important;
+}
+
 .details-topline,
 .dialog-heading {
   justify-content: space-between;

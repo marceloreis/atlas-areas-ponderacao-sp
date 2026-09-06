@@ -15,7 +15,7 @@ from openpyxl import load_workbook
 
 LAYER = "AreasDePonderacao2022_SP"
 COORDINATE_DECIMALS = 5
-ABSOLUTE_GROUPS = {"Tab8_1", "Tab8_2", "Tab8_3"}
+ABSOLUTE_GROUPS = {"Tab2_1", "Tab2_3", "Tab8_1", "Tab8_2", "Tab8_3"}
 JSON_CHUNK_BYTES = 512 * 1024
 BASE_COLUMNS = [
     "id_0",
@@ -324,9 +324,9 @@ def main() -> None:
                 }
             )
 
-        # A primeira variável de cada tabela é o seu universo/Total. Somente ela
-        # permanece em valor absoluto na interface; todas as demais são exibidas
-        # como percentuais calculados sobre esse denominador.
+        # A primeira variável de cada tabela é o seu universo/Total. Ela e todas
+        # as variáveis das tabelas configuradas em ABSOLUTE_GROUPS permanecem em
+        # valor absoluto; as demais são exibidas como percentuais do Total.
         for group in groups:
             total_field_index = group["field_indexes"][0]
             group["total_field_index"] = total_field_index
