@@ -1,9 +1,9 @@
 (() => {
   "use strict";
 
-  const palette = ["#CAD2C5", "#84A98C", "#52796F", "#354F52", "#2F3E46"];
+  const palette = ["#eae2b7", "#fcbf49", "#f77f00", "#d62828", "#003049"];
   const nullColor = "#dfe5eb";
-  const baseStroke = "#ffffff5f";
+  const baseStroke = "#0f0f0f";
   const selectedStroke = "#10243a";
   const absoluteValueGroups = new Set(["Tab2_1", "Tab2_3", "Tab8_1", "Tab8_2", "Tab8_3"]);
   const ptInteger = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
@@ -652,7 +652,7 @@
       state.tonerTileErrors += 1;
       if (state.tonerTilesLoaded || state.tonerTileErrors < 3 || !state.map.hasLayer(state.tonerLayer)) return;
       state.map.removeLayer(state.tonerLayer);
-      elements.mapBaseNote.textContent = "Base vetorial local · Toner Lite indisponível";
+      elements.mapBaseNote.textContent = "Base vetorial local · OpenStreetMap indisponível";
       elements.mapBaseNote.classList.add("fallback");
       showToast("O mapa-base externo está indisponível; a base vetorial local foi mantida.");
     });
