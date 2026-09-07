@@ -195,10 +195,10 @@
     const selected = feature.properties.cd_apond === state.selectedCode;
     return {
       color: selected ? selectedStroke : baseStroke,
-      weight: selected ? 2.5 : 0.65,
-      opacity: selected ? 1 : 0.86,
+      weight: selected ? 3.0 : 0.75,
+      opacity: selected ? 1 : 0.77,
       fillColor: colorForValue(valueForFeature(feature)),
-      fillOpacity: selected ? 0.9 : 0.84,
+      fillOpacity: selected ? 0.9 : 0.78,
     };
   }
 
