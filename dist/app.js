@@ -645,7 +645,7 @@
       if (event.tile?.src?.startsWith("data:")) return;
       if (state.tonerTilesLoaded) return;
       state.tonerTilesLoaded = true;
-      elements.mapBaseNote.textContent = "Stamen Toner Lite · Stadia Maps";
+      elements.mapBaseNote.textContent = "OpenStreetMap";
       elements.mapBaseNote.classList.remove("fallback");
     });
     state.tonerLayer.on("tileerror", () => {
