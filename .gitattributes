@@ -1,5 +1,3 @@
-scripts/* linguist-vendored
-
 dist/data/*.geojson linguist-generated=true
 dist/data/*.json linguist-generated=true
 dist/data/*.part-* linguist-generated=true
